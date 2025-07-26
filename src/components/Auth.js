@@ -1,13 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { GoogleLogin } from '@react-oauth/google';
-import { storeGoogleAuth, getCurrentUser, logout } from '../utils/auth';
+import { storeGoogleAuth, getCurrentUser, logout, isAuthenticated } from '../utils/auth';
 
 const Auth = () => {
   const [user, setUser] = useState(getCurrentUser());
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    // If user is already authenticated, redirect to AI CMS
+    if (isAuthenticated() && user) {
+      navigate('/ai-cms');
+    }
+  }, [user, navigate]);
 
   const handleGoogleSuccess = async (credentialResponse) => {
     setIsLoading(true);
@@ -119,7 +126,7 @@ const Auth = () => {
                 
                 <div className="space-y-3">
                   <button
-                    onClick={() => navigate('/home')}
+                    onClick={() => navigate('/ai-cms')}
                     className="w-full py-3 px-4 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white font-medium rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
                   >
                     Continue to Dashboard

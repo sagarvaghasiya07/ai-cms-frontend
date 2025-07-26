@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { getCurrentUser, logout } from '../utils/auth';
+import { getCurrentUser, logout, isAuthenticated } from '../utils/auth';
 
 const Home = () => {
   const [user, setUser] = useState(null);
@@ -9,16 +9,38 @@ const Home = () => {
   useEffect(() => {
     // Check if user is logged in
     const currentUser = getCurrentUser();
+    const authenticated = isAuthenticated();
+    
+    if (authenticated && currentUser) {
+      setUser(currentUser);
+      // If user is already logged in, redirect to AI CMS
+      navigate('/ai-cms');
+      return;
+    }
+    
     if (currentUser) {
       setUser(currentUser);
     }
-  }, []);
+  }, [navigate]);
 
   const handleLogout = () => {
     logout();
     setUser(null);
     navigate('/');
   };
+
+  const handleGetStarted = () => {
+    if (user) {
+      navigate('/ai-cms');
+    } else {
+      navigate('/auth');
+    }
+  };
+
+  // If user is logged in, don't render the home page
+  if (user) {
+    return null;
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
@@ -30,36 +52,9 @@ const Home = () => {
               <h1 className="text-2xl font-bold text-white">AI CMS</h1>
             </div>
             <div className="flex items-center space-x-4">
-              {user ? (
-                <>
-                  <div className="flex items-center space-x-3">
-                      <img 
-                        src={user.profile_url} 
-                        alt="Profile" 
-                        className="w-8 h-8 rounded-full border-2 border-white/20"
-                      />
-                    <span className="text-white/90 text-sm">{user.name}</span>
-                  </div>
-                  <Link to="/ai-cms" className="text-white/70 hover:text-white px-4 py-2 rounded-lg transition-colors duration-300">
-                    AI CMS
-                  </Link>
-                  <button 
-                    onClick={handleLogout}
-                    className="bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-lg transition-colors duration-300"
-                  >
-                    Sign Out
-                  </button>
-                </>
-              ) : (
-                <>
-                  <Link to="/ai-cms" className="text-white/70 hover:text-white px-4 py-2 rounded-lg transition-colors duration-300">
-                    AI CMS
-                  </Link>
-                  <Link to="/auth" className="bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white px-6 py-2 rounded-lg font-medium transition-all duration-300 transform hover:scale-105">
-                    Get Started
-                  </Link>
-                </>
-              )}
+              <Link to="/auth" className="bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white px-6 py-2 rounded-lg font-medium transition-all duration-300 transform hover:scale-105">
+                Get Started
+              </Link>
             </div>
           </div>
         </div>
@@ -80,12 +75,12 @@ const Home = () => {
               Create, optimize, and manage your content with unprecedented ease and efficiency.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link
-                to="/ai-cms"
+              <button
+                onClick={handleGetStarted}
                 className="bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white px-8 py-4 rounded-xl font-semibold text-lg transition-all duration-300 transform hover:scale-105 shadow-2xl"
               >
                 Start Using AI CMS
-              </Link>
+              </button>
             </div>
           </div>
         </div>
@@ -160,12 +155,12 @@ const Home = () => {
           <p className="text-xl text-white/70 mb-10">
             Join thousands of creators and businesses using AI CMS to create amazing content.
           </p>
-          <Link
-            to="/ai-cms"
+          <button
+            onClick={handleGetStarted}
             className="bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white px-12 py-4 rounded-xl font-semibold text-lg transition-all duration-300 transform hover:scale-105 shadow-2xl"
           >
             Get Started Now
-          </Link>
+          </button>
         </div>
       </div>
 

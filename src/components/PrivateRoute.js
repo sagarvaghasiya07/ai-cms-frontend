@@ -6,8 +6,8 @@ const PrivateRoute = ({ children }) => {
   const authenticated = isAuthenticated();
   
   if (!authenticated) {
-    // Redirect to home page if not authenticated
-    return <Navigate to="/" replace />;
+    // Redirect to auth page if not authenticated
+    return <Navigate to="/auth" replace />;
   }
   
   return children;
