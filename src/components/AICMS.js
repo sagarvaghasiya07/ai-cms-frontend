@@ -348,8 +348,8 @@ const AICMS = () => {
                     }`}
                 >
                   <span className="mr-2">{tab.icon}</span>
-                  <span className="hidden xs:inline">{tab.name}</span>
-                  <span className="xs:hidden">{tab.name.split(' ')[0]}</span>
+                  <span className="hidden sm:inline">{tab.name}</span>
+                  <span className="sm:hidden">{tab.name.split(' ')[0]}</span>
                 </button>
               ))}
             </div>
