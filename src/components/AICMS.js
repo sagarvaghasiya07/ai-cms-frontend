@@ -403,6 +403,7 @@ const AICMS = () => {
                           <div className="flex items-center">
                             <span className="text-2xl mr-3">{templateIcons[template.name] || '📄'}</span>
                             <span className="font-medium">{template.name}</span>
+                            <span className="text-xs text-white/60 ml-2">({template.usedCount})</span>
                           </div>
                         </button>
                       ))}
